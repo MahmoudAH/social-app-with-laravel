@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('styles')
-    <link rel="stylesheet"  href="{{asset('css/chat.css')}}">
-
+    
     <link rel="stylesheet"  href="{{asset('css/chat2.css')}}">
 @endsection
 
@@ -130,12 +129,11 @@
             <chat-messages :messages="messages" :user="{{ Auth::user() }}">
                 
             </chat-messages>
-            
-          <chat-form
+        </div>
+        <chat-form
                         v-on:messagesent="addMessage"
                         :user="{{ Auth::user() }}">              
           </chat-form>
-        </div>
       </div>
     </div>
   </div>
@@ -143,6 +141,7 @@
 
 @endsection
 @section('scripts')
+
 <script>
 	const app = new Vue({
     el: '#app',

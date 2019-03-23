@@ -24,6 +24,8 @@ class CommentController extends Controller
 
     $comment = Comment::where('id', $comment->id)->with('user')->first();
     broadcast(new NewComment($comment))->toOthers();
-    return $comment->toJson();
+    return post::with('user','likes','comments.user')
+        ->orderBy('created_at','DESC')->get();
+    //return $comment->toJson();
   }
 }

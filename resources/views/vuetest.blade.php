@@ -84,14 +84,17 @@
                             </li>
                         </ul>
                     </div>
-                    <form method="post" action="{{ route('posts.store') }}">
-                      {{ csrf_field() }}
+                    <form method="post" @submit.prevent="addPost">
+                      
                     <div class="card-body">
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
-                                <div class="form-group">
+                                
+                                <div   :class="['form-group', validationErrors.content ? 'has-error' : '']" >
+                                
                                     <label class="sr-only" for="message">post</label>
-                                    <textarea class="form-control" id="message" rows="3" placeholder="What are you thinking?"  name="content"  value="{{ old('content') }}"></textarea>
+                                    <textarea class="form-control" id="message" rows="3" placeholder="What are you thinking?"  name="content"  value="{{ old('content') }}" v-model="content"></textarea>
+                                    <span v-if="validationErrors.content" :class="['label label-danger']">@{{ validationErrors.content[0] }}</span>
                                 </div>
 
                             </div>
@@ -107,7 +110,7 @@
                         </div>
                         <div class="btn-toolbar justify-content-between">
                             <div class="btn-group">
-                                <button type="submit" class="btn btn-primary">share</button>
+                                <button type="submit" class="btn btn-primary" >share</button>
                             </div>
                             <div class="btn-group">
                                 <button id="btnGroupDrop1" type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
@@ -127,9 +130,9 @@
                 <!-- Post /////-->
 
 
-                @foreach($posts as $post)
+                
                 <!--- \\\\\\\Post-->
-                <div class="card gedf-card" style="margin-bottom: 20px">
+                <div class="card gedf-card" style="margin-bottom: 20px" v-for="post,key in posts">
                     <div class="card-header">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="d-flex justify-content-between align-items-center">
@@ -137,7 +140,7 @@
                                     <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">
                                 </div>
                                 <div class="ml-2">
-                                    <div class="h5 m-0">{{$post->user->name}}</div>
+                                    <div class="h5 m-0">@{{post.user.name}}</div>
                                     <div class="h7 text-muted">Miracles Lee Cross</div>
                                 </div>
                             </div>
@@ -149,10 +152,13 @@
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
                                         <div class="h6 dropdown-header">Configuration</div>
                                         <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="{{route('posts.show',$post->id)}}">Show</a>
+                                        <a class="dropdown-item" href="">Show</a>
                                         <a class="dropdown-item" href="#" data-toggle="modal" 
-                                        data-target="#exampleModalLong" data-title="{{$post->title}}"  data-content="{{$post->content}}"data-id="{{$post->id}}"  >Edit</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal" data-id="{{$post->id}}">Delete</a>
+                                        data-target="#exampleModalLong" 
+                                        data-title="post.title"  
+                                        data-content="post.content"
+                                        data-id="post.id" >Edit</a>
+                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal" >Delete</a>
                                         <a class="dropdown-item" href="#">Hide</a>
                                         <a class="dropdown-item" href="#">Report</a>
                                     </div>
@@ -162,27 +168,23 @@
 
                     </div>
                     <div class="card-body">
-                        <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>{{ $post->created_at->
-                           format('Y h:ia') }}</div>
+                        <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>@{{ post.created_at}}</div>
                         <a class="card-link" href="#">
-                            @if($post->title)
-                            <h5 class="card-title">{{$post->title}}.</h5>
-                            @else
-                            <h5 class="card-title">{{str_limit($post->content,35)}}..</h5>
-                            @endif
+                            <h5 class="card-title" v-if="post.title">@{{post.title}}</h5>
+                            <h5 class="card-title" v-else>@{{post.content.substring(0,8)+".." }}</h5>
+                            
                         </a>
 
                         <p class="card-text">
-                          {{str_limit($post->content,255)}}...
+                          @{{post.content.slice(0,200) + "....." }}
                         </p>
-                        
 
                         <!--post likes count-->
                         <section style="margin-bottom: -20px">
-                        @if($post->likes()->count() > 0)
-                        <hr style="color: #d9d9f3">
-                       <a href=""   data-toggle="modal" data-target="#exampleModal"  data-id="{{$post->id}}">
-                       <span > {{$post->likes()->count()}} <i class="fa fa-heart-o" aria-hidden="true" class="fa fa-heart"  ></i> </span></a>
+                        
+                        <hr style="color: #d9d9f3" v-if="post.likes.length >0">
+                       <a href=""   data-toggle="modal" data-target="#exampleModal"  data-id="post.id" v-if="post.likes.length >0">
+                       <span > @{{post.likes.length}} <i class="fa fa-heart-o" aria-hidden="true" class="fa fa-heart"  ></i> </span></a>
                        <!-- Button trigger modal -->
 
                          <!-- Modal -->
@@ -196,14 +198,14 @@
                                  </button>
                                </div>
                                <div class="modal-body">
-                                 @foreach($post->likes as $like)
-                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 20px">               
+                                 
+                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 20px" v-for="like in post.likes">               
                                   <div class="d-flex justify-content-between align-items-center">
                                   <div class="mr-2" >
                                     <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">
                                   </div>
                                   <div class="ml-2">
-                                      <div class="h5 m-0">{{$like->name}}</div>
+                                      <div class="h5 m-0"> @{{like.name}}</div>
                                       <div class="h7 text-muted">Miracles Lee Cross
                                       </div>
                                   </div>
@@ -211,7 +213,7 @@
                               <button class="btn btn-primary pull-right"><i class="fa fa-user-plus" aria-hidden="true"></i>
                               add friend</button>
                             </div>
-                                 @endforeach
+                                 
                                </div>
                                <div class="modal-footer">
                                  <button type="button" class="btn btn-secondary"                          data-dismiss="modal">Close</button>
@@ -219,182 +221,50 @@
                              </div>
                            </div>
                          </div>
-                        @endif
-                        @if($post->comments()->count() > 0 and $post->likes()->count() == 0)
-                        <hr style="color: #d9d9f3">
-                        @endif
-                        @if($post->comments()->count() > 0)
-                        <a href="" class="pull-right" @click.prevent=" commentHidden =! commentHidden" :class="testComment" style="margin-bottom: -20px">
-                         <span > {{$post->comments()->count()}} comment </span></a>
-                        @endif
+                        
+                        
+                        <hr style="color: #d9d9f3" v-if="post.comments.length >0 && post.likes.length == 0">
+                        
+                        
+                        <a href="" v-if="post.comments.length > 0" class="pull-right" @click.prevent=" commentHidden =! commentHidden" :class="testComment" style="margin-bottom: -20px">
+                         <span > @{{post.comments.length}} comment </span></a>
+                        
                       </section>
-                    </div>
+                        
+                     </div>
+                     <span v-if="post.liked">this post is liked</span>
                     <div class="card-footer">
-                        <like :post={{ $post->id }}
-                          :favorited={{ $post->liked() ? 'true' : 'false' }}>
+                        
+                        <a href="#" class="card-link" v-if="isFavorited" @click.prevent="unFavorite(post.id,key)" style="margin-right:15px" >
+                          <i  class="fa fa-heart" style="color:red;"></i>Like
+                        </a>
+                        <a href="#" class="card-link" v-else @click.prevent="favorite(post.id,key)" style="margin-right:15px" >
+                          <i  class="fa fa-heart-o"></i>Like
+                        </a>
 
-                        </like>
                         <a href="#" class="card-link" data-toggle="modal" data-target="#commentOnPost"><i class="fa fa-comment"></i> Comment</a>
                         <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
                     </div>
-                    
-                    <comment :post={{ $post->id }}
-                                :user="{{  Auth::user()->toJson() }}" >
 
-                    </comment>
-                    @foreach ($post->comments as $comment) 
-                     <div class="media" style="margin-top:20px;"  v-if="testComment">
-                       <div class="media-left">
-                         <a href="#">
-                           <img class="media-object" src="http://placeimg.com/80/80" alt="..." style="padding-right: 5px">
-                         </a>
-                       </div>
-                       <div class="media-body">
-                         <h4 class="media-heading" style="margin-bottom: 2px">{{$comment->user->name}} said...                 
-                         </h4>
-                         <p style="margin-bottom: 2px">
-                           {{$comment->body}}
-                         </p>
-                         <span style="color: #aaa;">on {{$comment->created_at}}</span>
-                       </div>
-                     </div>
-                     @endforeach
-                </div>
-                
-                <!-- Post /////-->
-               @endforeach
+                    <textarea @keyup.enter="postComment(post.id,key)" class="form-control" rows="3" name="body" placeholder="Write a  comment" v-model="commentBox[key]" style="margin-top:5px;
+                     height: 50px">
+                    </textarea>
 
-               <!--edit Modal -->
-               <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                 <div class="modal-dialog" role="document">
-                   <div class="modal-content">
-                     <div class="modal-header">
-                       <h5 class="modal-title" id="exampleModalLabel">Edit Post </h5>
-                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                       </button>
-                     </div>
-                     <form method="post" action="{{ route('update', 'post') }}" id="update-post">
-                     {{ method_field('put') }}
-                     {{ csrf_field() }}
-                     
-                     <div class="modal-body">
-                      <input type="hidden" class="form-control" id="post_id"  name="post_id">
-                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                     <div class="form-group">
-
-                       <label for="title">Title</label>
-                       <input type="text" class="form-control" id="title" placeholder="Title"  name="title">
-                       @if ($errors->has('title'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('title') }}</strong>
-                                    </span>
-                        @endif
-                     </div>
-
-                     <div class="form-group">
-                       <label for="content">Post Content</label>
-                       <textarea class="form-control" rows="8" id="content" placeholder="Write something amazing..." name="content"></textarea>
-                       @if ($errors->has('content'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('content') }}</strong>
-                                    </span>
-                       @endif
-                     </div>
-
-                     <div class="form-group">
-                       <label><input type="checkbox" name="published" style="margin-right: 15px;" {{ $post->published ? "checked" : '' }}>Published</label>
-                     </div>
-
-                     </div>
-                     <div class="modal-footer">
-                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                       <button type="submit" class="btn btn-primary btn-lg">Save Post</button>
-                     </div>
-                     </form>
-                   </div>
-                 </div>
-               </div> <!--end edit modal-->
-               
-               <!--comment Modal -->
-               <div class="modal fade" id="commentOnPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                 <div class="modal-dialog" role="document">
-                   <div class="modal-content">
-                     <div class="modal-header">
-                       <h5 class="modal-title" id="exampleModalLabel">comment on Post</h5>
-                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                       </button>
-                     </div>
-                     <div class="modal-body">
-                     <div class="form-group">
-                       <label for="post_title">Title</label>
-                       <input type="text" class="form-control" id="post_title" placeholder="Title" value="{{ $post->title }}" name="title" disabled>
-                     </div>
-
-                     <div class="form-group">
-                       <label for="post_content">Post Content</label>
-                       <textarea class="form-control" rows="8" id="post_content" placeholder="Write something amazing..." name="content" disabled>{{ $post->content }}</textarea>
-                     </div>
-                     <div class="">
-                         <like :post={{ $post->id }}
-                           :favorited={{ $post->liked() ? 'true' : 'false' }}>
-
-                         </like>
-                         <a href="#" class="card-link" data-toggle="modal" data-target="#commentOnPost"><i class="fa fa-comment"></i> Comment</a>
-                         <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-                     </div>
-                     <div class="form-group">
-                       <!--comment box-->
-                       <comment :post={{ $post->id }}
-                                :user="{{  Auth::user()->toJson() }}">
-
-                       </comment>
-                     </div>
-
-                     </div>
-                     <div class="modal-footer">
-                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                       <button class="btn btn-primary btn-lg">Save Post</button>
-                     </div>
-                   </div>
-                 </div>
-               </div> <!--end commment modal-->
-
-               <!--delete Modal -->
-               <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                 <div class="modal-dialog" role="document">
-                   <div class="modal-content">
-                     <div class="modal-header">
-                       <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
-                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                       </button>
-                     </div>
-                     <form  method="post" action="{{ route('delete', 'post') }}">
-                       {{ method_field('delete') }}
-                       {{ csrf_field() }}
-
-                     <div class="modal-body">
-                      <input type="hidden" class="form-control" id="post_id"  name="post_id">
-                      <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                       <h2>Are you want to delete that post?!!!!</h2>
-
-                     </div>
-                     <div class="modal-footer">
-                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                       <button  type="submit" class="btn btn-primary btn-lg">Delete Post</button>
-                     </div>
-                     </form>
-                   </div>
-                 </div>
-               </div><!--end delete modal-->
-
-              {{ $posts->links() }}
-
+                    <div class="media" style="margin-top:20px;" v-for="comment in post.comments"  v-if="commentHidden">
+                      <div class="media-left">
+                        <a href="#">
+                          <img class="media-object" src="http://placeimg.com/80/80" alt="..." style="padding-right: 5px">
+                        </a>
+                      </div>
+                      <div class="media-body">
+                        <h4 class="media-heading" style="margin-bottom: 2px">@{{ comment.user.name }} said...</h4>
+                        <p style="margin-bottom: 2px">
+                          @{{comment.body}}
+                        </p>
+                        <span style="color: #aaa;">on @{{comment.created_at}}</span>
+                      </div>
+                    </div>
+               </div>
             </div>
             <div class="col-md-3">
                 <div class="card gedf-card">
@@ -436,24 +306,110 @@
               commentHidden: false,
               liked: false,
               likes: '',
-              comments: {},
-              commentBox: '',
+              comments: [],
+              commentBox: {},
+              posts:[],
+              user: {!! Auth::check() ? Auth::user()->toJson() : 'null' !!},
+              content:'',
+              validationErrors:[],
+              isFavorited: '',
+              favorited:false,
+              
 
             },
+            mounted(){
+             axios.get('/test/posts')
+             .then(response => {
+              console.log(response); 
+              this.posts = response.data; 
+              console.log('congrat');
+
+            })
+             .catch(function (error) {
+              console.log(error); // run if we have error
+           });
+
+            this.isFavorited = this.isFavorite ? true : false;
+       
+           },
             computed:{
               testComment:function(){
 
                   return this.commentHidden;
               },
+              likedPost:function(){
+
+                  return this.posts.liked ? true: false ;
+              },
               testLike:function(){
                 return (this.liked) ? 'liked':'';
-              }
+              },
+              isFavorite() {
+                //return this.posts.liked ? true: false ;
+                return this.favorited;
+              },
+
             },
             methods:{
               editPost(){
                 console.log('dtfdhygfh');
                 $('#exampleModal').modal('show');
-              }
+              },
+              addPost() {
+                axios.post('/post/create', {
+                  api_token: this.user.api_token,
+                  content: this.content
+                })
+                .then((response) => {
+                  //app.posts.unshift(response.data);
+                  //console.log(this.posts[0]);
+                  this.content = '';
+                  if(response.status===200){
+                    app.posts = response.data;
+               }
+                })
+                .catch((error) => {
+                  
+                  if (error.response.status == 422){
+                         this.validationErrors = error.response.data.errors;
+                  }
+                  console.log(error);
+                })
+              },
+              favorite(id,key) {
+                axios.post('/like/'+id)
+                    .then((response) => {
+                      this.isFavorited = true;
+                      this.posts = response.data
+                    })
+                    .catch(response => console.log(response.data));
+              },
+
+              unFavorite(id,key) {
+                axios.post('/unlike/'+id)
+                .then((response) => {
+                  this.isFavorited = false;
+                  this.posts = response.data
+                })
+                .catch(response => console.log(response.data));
+              },
+              postComment(post,key) {
+                axios.post('/api/posts/'+post+'/comment', {
+                  api_token: this.user.api_token,
+                  body: this.commentBox[key]
+                })
+                .then((response) => {
+                  if(response.status===200){
+                    app.posts = response.data;
+                  }
+                  this.commentBox[key] = '';
+                  console.log('sucess');
+                })
+                .catch((error) => {
+                  console.log(error);
+                })
+
+              },
             }
           });
 

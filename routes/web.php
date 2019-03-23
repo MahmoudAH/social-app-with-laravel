@@ -14,8 +14,17 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/test/posts', function () {
+      return App\post::with('user','likes','comments.user')
+			->orderBy('created_at','DESC')
+			->get();
+});
 
-
+/*$posts = Post::with(['like' => function ($like) use ($user_id) {
+    return $like->whereHas('user', function ($user) use ($user_id) {
+        $user->where('id', $user_id);
+    })->get();
+}])->get();*/
 
 //new Routes
 use Alert as Alert;
@@ -31,7 +40,7 @@ Route::get('/testcom', function () {
 });
 
 Auth::routes();
-
+Route::post('/post/create', 'VueController@store');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/home', 'HomeController@store')->name('store');
 Route::put('/home/{post}', 'HomeController@update')->name('update');
@@ -62,3 +71,4 @@ Route::get('/posts/{post}/likes', 'LikeController@showLikes')->name('post.likes'
 Route::get('/chat', 'ChatsController@index')->name('chat');
 Route::get('/messages', 'ChatsController@fetchMessages');
 Route::post('/messages', 'ChatsController@sendMessage');
+Route::get('/load', 'PostController@load_display');

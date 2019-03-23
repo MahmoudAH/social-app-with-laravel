@@ -34,5 +34,13 @@ class Post extends Model
                         ->where('post_id', $this->id)
                         ->first();
   }
+  public function load_display()
+    {
+
+        $load = Post::liked()->get();
+
+        return response()->json($load );
+
+    }
 
 }

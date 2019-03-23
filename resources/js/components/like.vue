@@ -11,12 +11,13 @@
 
 <script>
     export default {
-        props: ['post', 'favorited'],
+        props: ['post'],
 
         data: function() {
             return {
+                
+                favorited:"this.post.liked ? true: false ",
                 isFavorited: '',
-
             }
         },
 
@@ -28,6 +29,7 @@
             isFavorite() {
                 return this.favorited;
             },
+            
         },
 
         methods: {

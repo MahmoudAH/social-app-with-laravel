@@ -23,7 +23,9 @@ class LikeController extends Controller
     {
         
         Auth::user()->likes()->attach($post->id);
-        return back();
+        
+        return post::with('user','likes','comments.user')->orderBy('created_at','DESC')->get();
+      
     }
 
     /**
@@ -36,7 +38,8 @@ class LikeController extends Controller
     {
         Auth::user()->likes()->detach($post->id);
 
-        return back();
+        return post::with('user','likes','comments.user')->orderBy('created_at','DESC')->get();
+      
     } 
     public function countPost(Post $post)
     {

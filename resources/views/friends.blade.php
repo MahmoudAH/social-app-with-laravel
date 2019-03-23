@@ -28,28 +28,28 @@
     <tbody>
       @foreach(Auth::user()->friendOf as $request)
       <tr >
-          <td>
-            <div><img class="media-object" src="http://placeimg.com/80/80" alt="...">
-            </div>
-            
-            <div style="float: right;margin-top: -70px">
-              <strong>{{$request->name}}{{$request->status}}</strong> <br>
-              <span style="opacity: .5">63 matual friends</span> 
-            </div>
-          </td>
-          <div class="clearfix">...</div>
-          <td >
-            <form method="POST" action="{{route('friend.accept',$request->id)}}">
-              {{csrf_field()}}
+        <td>
+          <div><img class="media-object" src="http://placeimg.com/80/80" alt="...">
+          </div>
+
+          <div style="float: right;margin-top: -70px">
+            <strong>{{$request->name}}{{$request->status}}</strong> <br>
+            <span style="opacity: .5">63 matual friends</span> 
+          </div>
+        </td>
+        <div class="clearfix">...</div>
+        <td >
+          <form method="POST" action="{{route('friend.accept',$request->id)}}">
+            {{csrf_field()}}
             <button class="btn btn-info" >accept Friend 
             </button>
-            </form><div class="clearfix">...</div>
-            <form method="POST" action="{{route('friend.remove',$request->id)}}">
-              {{csrf_field()}}
+          </form><div class="clearfix">...</div>
+          <form method="POST" action="{{route('friend.remove',$request->id)}}">
+            {{csrf_field()}}
             <button class="btn btn-info" >Remove 
             </button>
-            </form>
-          </td>
+          </form>
+        </td>
       </tr>
 
     @endforeach
@@ -93,13 +93,13 @@
               <span style="opacity: .5">63 matual friends</span> </div>
             </td>
          
-          <td style="float: right;">
+          <td >
             <span class="btn btn-primary" style="margin: 5px">
               Friend 
             </span>
             <form method="POST" action="{{route('friend.remove',$friend->id)}}">
               {{csrf_field()}}
-            <button class="btn btn-info" >Remove 
+            <button class="btn btn-info pull-right" >Remove 
             </button>
             </form>
           </td>
@@ -129,32 +129,33 @@
     <tbody>
       @foreach($users as $user)
       <tr>
-          <td>
-            <div><img class="media-object" src="http://placeimg.com/80/80" alt="..."></div>
-            <div style="float: right;margin-top: -70px"> <strong>{{$user->name}}</strong> <br>
-              <span style="opacity: .5">63 matual friends</span> </div>
+        <td>
+          <div><img class="media-object" src="http://placeimg.com/80/80" alt="..."></div>
+          <div style="float: right;margin-top: -70px"> <strong>{{$user->name}}</strong> <br>
+            <span style="opacity: .5">63 matual friends</span> </div>
           </td>
+
           <td style="float: right;">
-              @if(Auth::user()->requestIsSent($user->id))   
-                 <button type="submit"  class="btn btn-primary btn-sm request" @click="showModal()">
-                 <span style="color: "><i class="fa fa-check" aria-hidden="true"></i>
-               request sent</span> 
-                 </button> 
-                @elseif(Auth::user()->isFriend($user->id))
-                <span class="btn btn-primary" style="margin: 5px">
-                 Friend 
-                </span>
-                @else
-                 <form method="POST" action="{{route('friend.add',$user->id)}}">
-                    {{ csrf_field() }}
-                  <button class="btn btn-success" style="margin: 5px  ">
-                    <i class="fa fa-user-plus" aria-hidden="true"></i>
-                     Add Friend 
-                  </button></form> 
-                @endif
-                <button type="submit" class="btn btn-info" >
-                  Remove 
-                </button>
+            @if(Auth::user()->requestIsSent($user->id))   
+            <button type="submit"  class="btn btn-primary btn-sm request" @click="showModal()">
+             <span style="color: "><i class="fa fa-check" aria-hidden="true"></i>
+             request sent</span> 
+           </button> 
+           @elseif(Auth::user()->isFriend($user->id))
+           <span class="btn btn-primary" style="margin: 5px">
+             Friend 
+           </span>
+           @else
+           <form method="POST" action="{{route('friend.add',$user->id)}}">
+            {{ csrf_field() }}
+            <button class="btn btn-success" style="margin: 5px  ">
+              <i class="fa fa-user-plus" aria-hidden="true"></i>
+              Add Friend 
+            </button></form> 
+            @endif
+            <button type="submit" class="btn btn-info" >
+              Remove 
+            </button>
           </td>         
       </tr>    
       @endforeach 

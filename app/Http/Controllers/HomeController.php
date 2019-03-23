@@ -33,15 +33,18 @@ class HomeController extends Controller
 /*
         $posts = Post::with('user')->
         whereIn('user_id', Auth::user()->friends()->pluck('friend_id'))->orWhere('user_id', $id)->latest()->get();
-*/
+*//*
         $posts = Post::latest()->paginate(25);
         //random pepoel to add friends
 
         $peopelToFollow=User::where('id','!=',$id)->take(3)->inRandomOrder()->get();
-
-        return view('home',compact('peopelToFollow'))->withPosts($posts);
+         return Post::with('user','likes','comments')
+         ->orderBy('created_at','DESC')
+         ->get();
+        */
+        return view('vuetest');
     }
-
+    /*
     public function store(Request $request)
     {
       $this->validate($request, [
@@ -59,7 +62,7 @@ class HomeController extends Controller
 
 
       return redirect()->route('home');
-    }
+    }*/
 
     public function friends()
     {
@@ -88,6 +91,23 @@ class HomeController extends Controller
        
        return back()->with('message','wow...deleted successfully');
        
+    }
+    public function store(Request $request)
+    {
+      $this->validate($request, [
+        'title' => 'max:255',
+        'content' => 'required',
+      ]);
+
+      $user = Auth::user();
+
+      $post = $user->posts()->create([
+        'content' => $request->content,
+        'published' => $request->has('published')
+      ]);
+      return post::with('user','likes','comments')
+        ->orderBy('created_at','DESC')->get();
+     // return response()->json($post);
     }
 
 }

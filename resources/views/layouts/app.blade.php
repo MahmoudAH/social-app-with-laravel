@@ -100,78 +100,56 @@
           <!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
+              <i class="fa fa-user-plus" aria-hidden="true"></i>
+
               <span class="label label-success">4</span>
             </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
+            <ul class="dropdown-menu" style="width: 500px">
+              <li class="header"> You have {{Auth::user()->friendOf->count()}} request of freinds</li>
               <li>
                 <!-- inner menu: contains the actual data -->
-                <ul class="menu">
+                <ul class="menu" >
+                  @if( Auth::user()->friendOf->count() > 0 )
+                   @foreach(Auth::user()->friendOf as $request)
                   <li><!-- start message -->
                     <a href="#">
                       <div class="pull-left">
                         <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
                       </div>
                       <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                        {{$request->name}}
+                        <small>
+                          <button class="btn btn-info" onclick="event.preventDefault();
+                          document.getElementById('accept-friend')
+                          .submit();">Accept Friend 
+                        </button>
+                        <button class="btn btn-danger"  onclick="event.preventDefault();
+                          document.getElementById('delete-request')
+                          .submit();">Remove 
+                        </button>
+                      </small>
                       </h4>
-                      <p>Why not buy a new awesome theme?</p>
+                      <form id="accept-friend" method="POST" action="{{route('friend.accept',$request->id)}}">
+                                  {{csrf_field()}}
+                      </form>
+                      <form id="delete-request" method="POST" action="{{route('friend.remove',$request->id)}}">
+                                  {{csrf_field()}}
+                                  
+                      </form>
+                      <p>63 matual friends</p>
                     </a>
                   </li>
+                  @endforeach
+                  @else
+                  <h5 style="padding: 10px">You do not have any requests...</h5> 
+                  @endif
                   <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
+                  
                 </ul>
               </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
+             <!-- 
+              <li class="footer"><a href="#">bbbbbbbbbbbbbb</a></li>
+             -->
             </ul>
           </li>
           <!-- Notifications: style can be found in dropdown.less -->
@@ -351,31 +329,28 @@
     <script src="{{ asset('js/app.js')}}"></script>
 
     <script>
-          $(document).ready(function(){
+      $(document).ready(function(){
         $('#exampleModalLong').on('shown.bs.modal', function (event) {
-            
-  var button = $(event.relatedTarget) 
-  var title = button.data('title')
-  var content = button.data('content') 
-  var id = button.data('id') 
-  
-  var modal = $(this)
-  //modal.find('.modal-title').text('New message to ' + recipient)
-  modal.find('.modal-body #title').val(title)
-  modal.find('.modal-body #content').val(content)
-  modal.find('.modal-body #post_id').val(id)
-});
+
+          var button = $(event.relatedTarget) 
+          var title = button.data('title')
+          var content = button.data('content') 
+          var id = button.data('id')           
+          var modal = $(this)
+          modal.find('.modal-body #title').val(title)
+          modal.find('.modal-body #content').val(content)
+          modal.find('.modal-body #post_id').val(id)
+        });
         $('#deleteModal').on('shown.bs.modal', function (event) {
-            
-  var button = $(event.relatedTarget) 
-  var id = button.data('id') 
-  
-  var modal = $(this)
-  //modal.find('.modal-title').text('New message to ' + recipient)
-  
-  modal.find('.modal-body #post_id').val(id)
-});
-                });
+
+          var button = $(event.relatedTarget) 
+          var id = button.data('id') 
+
+          var modal = $(this)
+          
+          modal.find('.modal-body #post_id').val(id)
+        });
+      });
     </script>
     @yield('scripts')
 </body>

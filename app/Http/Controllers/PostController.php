@@ -132,5 +132,13 @@ class PostController extends Controller
     $post = Post::find($post_id);
 
     $user->notify(new NewPost($post));
-}
+    }
+    public function load_display()
+    {
+
+       $load = Post::with('liked')->get();
+        dd($load);
+        return response()->json($load );
+
+    }
 }
