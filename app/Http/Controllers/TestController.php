@@ -26,4 +26,19 @@ class TestController extends Controller
     public function home_posts(){
          return Post::all();
     }
+
+    public function updatePost(Request $request, $id)
+    {
+      $this->validate($request, [
+        'title' => 'max:255',
+        'content' => 'required',
+      ]);
+
+      $post = Post::findOrFail($id);
+      $post->content = $request->content;
+      $post->save();
+
+      return post::with('user','likes','comments')
+        ->orderBy('created_at','DESC')->get();
+    }
 }

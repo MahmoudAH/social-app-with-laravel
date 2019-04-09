@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('styles')
 <link  href="{{ asset('css/friends.css') }}">
+<link href="https://fonts.googleapis.com/css?family=Germania+One" rel="stylesheet">
 <style type="text/css">
   body {
             background-color: #eeeeee;
@@ -29,9 +30,107 @@
             content: none;
             display: none;
         }
+        .twPc-div {
+            background: #fff none repeat scroll 0 0;
+            border: 1px solid #e1e8ed;
+            border-radius: 6px;
+            height: 220px;
+            //*max-width: 340px; // orginal twitter width: 290px;*/
+        }
+        .twPc-bg {
+            background-image: url("https://images.unsplash.com/photo-1506269085878-5c33839927e9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60");
+            background-position: 0 50%;
+            background-size: 100% auto;
+            border-bottom: 1px solid #e1e8ed;
+            border-radius: 4px 4px 0 0;
+            height: 95px;
+            width: 100%;
+        }
+        .twPc-block {
+            display: block !important;
+        }
+        .twPc-button {
+            margin: -35px -10px 0;
+            text-align: right;
+            width: 100%;
+        }
+        .twPc-avatarLink {
+           
+            display: inline-block !important;
+            float: left;
+            margin: -30px 5px 0 8px;
+            max-width: 100%;
+            padding: 3px;
+            vertical-align: bottom;
+        }
+        .twPc-avatarImg {
+            border: 2px solid #fff;
+            border-radius: 7px;
+            box-sizing: border-box;
+            color: #fff;
+            height: 72px;
+            width: 72px;
+        }
+        .twPc-divUser {
+            margin: 5px 0 0;
+        }
+        .twPc-divName {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 21px;
+        }
+        .twPc-divName a {
+            color: inherit !important;
+        }
+        .twPc-divStats {
+            margin-left: 11px;
 
+            padding: 10px ;
+        }
+        .twPc-Arrange {
+            box-sizing: border-box;
+            display: table;
+            margin: 0;
+            min-width: 100%;
+            padding: 0;
+            table-layout: auto;
+        }
+        ul.twPc-Arrange {
+            list-style: outside none none;
+            margin: 0;
+            padding: 0;
+        }
+        .twPc-ArrangeSizeFit {
+            display: table-cell;
+            padding: 0;
+            vertical-align: top;
+        }
+        .twPc-ArrangeSizeFit a:hover {
+            text-decoration: none;
+        }
+        .twPc-StatValue {
+            display: block;
+            font-size: 18px;
+            font-weight: 500;
+            transition: color 0.15s ease-in-out 0s;
+        }
+        .twPc-StatLabel {
+            color: #8899a6;
+            font-size: 10px;
+            letter-spacing: 0.02em;
+            overflow: hidden;
+            transition: color 0.15s ease-in-out 0s;
+            font-size: 13px;
+            font-weight: 500;
+            line-height: 21px;
+            font-family: 'Lobster', cursive;
+
+
+        }
 </style>
   
+<link href="https://fonts.googleapis.com/css?family=Germania+One|Lobster" rel="stylesheet">
+
 @endsection
 @section('content')
 @include('partials.error')
@@ -45,10 +144,56 @@
                         </div>
 
                     @endif
-</div>
+</div> 
         <div class="row">
+
             <div class="col-md-3">
-                <div class="card">
+               <!-- code start -->
+               <div class="twPc-div" >
+                   <a class="twPc-bg twPc-block"></a>
+
+                <div >
+                    
+                    <a title="Mert S. Kaplan" href="https://twitter.com/mertskaplan" class="twPc-avatarLink" >
+                        <img alt="Mert S. Kaplan" src="images/IMG_20180624_124333176.jpg" style="border-radius: 50%" class="twPc-avatarImg">
+                    </a>
+
+                    <div class="twPc-divUser">
+                        <div class="twPc-divName">
+                            <a href="https://twitter.com/El3okla">Mahmoud Ali</a>
+                        </div>
+                        <span>
+                            <a href="https://twitter.com/mertskaplan">@<span>El3okla</span></a>
+                        </span>
+                    </div>
+
+                    <div class="twPc-divStats" > 
+                        <ul class="twPc-Arrange" >
+                            <li class="twPc-ArrangeSizeFit">
+                                <a href="https://twitter.com/mertskaplan" title="9.840 Tweet">
+                                    <span class="twPc-StatLabel twPc-block">Tweets</span>
+                                    <span class="twPc-StatValue">9.840</span>
+                                </a>
+                            </li>
+                            <li class="twPc-ArrangeSizeFit">
+                                <a href="https://twitter.com/mertskaplan/following" title="885 Following">
+                                    <span class="twPc-StatLabel twPc-block">Following</span>
+                                    <span class="twPc-StatValue">885</span>
+                                </a>
+                            </li>
+                            <li class="twPc-ArrangeSizeFit">
+                                <a href="https://twitter.com/mertskaplan/followers" title="1.810 Followers">
+                                    <span class="twPc-StatLabel twPc-block">Followers</span>
+                                    <span class="twPc-StatValue">1.810</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+               </div>
+               <!-- code end -->
+
+                <div class="card" style="margin-top: 30px">
                     <div class="card-body">
                         <div class="h5">{{ucfirst(Auth::user()->name)}}</div>
                         <div class="h7 text-muted">Fullname : Miracles Lee Cross</div>
@@ -93,7 +238,7 @@
                                 <div   :class="['form-group', validationErrors.content ? 'has-error' : '']" >
                                 
                                     <label class="sr-only" for="message">post</label>
-                                    <textarea class="form-control" id="message" rows="3" placeholder="What are you thinking?"  name="content"  value="{{ old('content') }}" v-model="content"></textarea>
+                                    <textarea class="form-control" id="message" rows="3" placeholder="What are you thinking?"  name="content"  value="form1" v-model="content"></textarea>
                                     <span v-if="validationErrors.content" :class="['label label-danger']">@{{ validationErrors.content[0] }}</span>
                                 </div>
 
@@ -101,7 +246,7 @@
                             <div class="tab-pane fade" id="images" role="tabpanel" aria-labelledby="images-tab">
                                 <div class="form-group">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <input type="file" class="custom-file-input" id="customFile" name="content" value="form2">
                                         <label class="custom-file-label" for="customFile">Upload image</label>
                                     </div>
                                 </div>
@@ -152,19 +297,93 @@
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
                                         <div class="h6 dropdown-header">Configuration</div>
                                         <a class="dropdown-item" href="#">Save</a>
-                                        <a class="dropdown-item" href="">Show</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" 
-                                        data-target="#exampleModalLong" 
-                                        data-title="post.title"  
-                                        data-content="post.content"
-                                        data-id="post.id" >Edit</a>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#deleteModal" >Delete</a>
-                                        <a class="dropdown-item" href="#">Hide</a>
+                                        <a class="dropdown-item" :href="'posts/'+post.id">Show</a>
+
+                                        <a class="dropdown-item" href="#" @click="openModal(post.id)" 
+                                        data-toggle="modal" :data-target="'#exampleModalLong' + post.id"
+                                        v-if="post.user.id == {{Auth::user()->id}}">Edit</a>
+
+                                        <a class="dropdown-item" href="#" data-toggle="modal" :data-target="'#deleteModal' + post.id" v-if="post.user.id == {{Auth::user()->id}}">Delete</a>
+
+                                        <a class="dropdown-item" href="#" v-if="post.user.id == {{Auth::user()->id}}">Hide</a>
+
                                         <a class="dropdown-item" href="#">Report</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <!--start delete modal-->
+                        <div class="modal fade deleteModal" :id="'deleteModal' + post.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                         <div class="modal-dialog" role="document">
+                                           <div class="modal-content">
+                                             <div class="modal-header">
+                                               <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                 <span aria-hidden="true">&times;</span>
+                                               </button>
+                                             </div>
+                                             
+                                             <div class="modal-body">
+                                               <h4>Are you want to delete that post ?!!</h4>
+
+                                             </div>
+                                             <div class="modal-footer">
+                                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                               <button  type="button" class="btn btn-primary btn-lg" @click.prevent="deletePost(post.id)">Delete Post</button>
+                                             </div>
+                                             
+                                           </div>
+                                         </div>
+                                       </div><!--end delete modal-->
+                                       
+                                       <!--start edit modal-->
+                                       <div class="modal fade editModal" :id="'exampleModalLong' + post.id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                         <div class="modal-dialog" role="document">
+                                           <div class="modal-content">
+                                             <div class="modal-header">
+                                               <h5 class="modal-title" id="exampleModalLabel">Edit Post </h5>
+                                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                 <span aria-hidden="true">&times;</span>
+                                               </button>
+                                             </div>
+                                        
+                                             
+                                             <div class="modal-body">
+                                              
+                                             <div :class="['form-group', validationErrors.title ? 'has-error' : '']">
+
+                                               <label for="title">Title</label>
+                                               <input type="text" class="form-control" id="title" placeholder="Title"  name="title" v-model="title">
+                                               <span v-if="validationErrors.title" :class="['label label-danger']">@{{ validationErrors.title[0] }}</span>
+                                               
+                                             </div>
+
+                                             <div :class="['form-group', validationErrors.content ? 'has-error' : '']">
+                                               <label for="content">Post Content</label>
+                                               <textarea class="form-control" rows="8" id="content" placeholder="Write something amazing..." name="content" v-model="updatedContent" required></textarea>
+                                               <span v-if="validationErrors.content" :class="['label label-danger']">@{{ validationErrors.content[0] }}</span>
+                                               
+                                             </div>
+
+                                             <div class="form-group">
+                                               <label class="active">
+                                                <input type="checkbox" name="published" style="margin-right: 15px;"  v-model="published" checked>Published
+                                              </label>
+                                             </div>
+
+
+                                             </div>
+                                             <div class="modal-footer">
+                                               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                               <button type="button" class="btn btn-primary btn-lg" @click.prevent=
+                                               " updatePost(post.id)" >Save Post</button>
+                                             </div>
+                                             
+                                           </div>
+                                         </div>
+                                       </div> <!--end edit modal-->
 
                     </div>
                     <div class="card-body">
@@ -178,44 +397,38 @@
                         <p class="card-text">
                           @{{post.content.slice(0,200) + "....." }}
                         </p>
+                        <!-- Modal -->
+                           <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                             <div class="modal-dialog" role="document">
+                               <div class="modal-content">
+                                 <div class="modal-header">
+                                   <h5 class="modal-title" id="exampleModalLabel">users who liked on this post</h5>
+                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                     <span aria-hidden="true">&times;</span>
+                                   </button>
+                                 </div>
+                                 <div class="modal-body">
 
-                        <!--post likes count-->
-                        <section style="margin-bottom: -20px">
-                        
-                        <hr style="color: #d9d9f3" v-if="post.likes.length >0">
-                       <a href=""   data-toggle="modal" data-target="#exampleModal"  data-id="post.id" v-if="post.likes.length >0">
-                       <span > @{{post.likes.length}} <i class="fa fa-heart-o" aria-hidden="true" class="fa fa-heart"  ></i> </span></a>
-                       <!-- Button trigger modal -->
-
-                         <!-- Modal -->
-                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                           <div class="modal-dialog" role="document">
-                             <div class="modal-content">
-                               <div class="modal-header">
-                                 <h5 class="modal-title" id="exampleModalLabel">users who liked on this post</h5>
-                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                   <span aria-hidden="true">&times;</span>
-                                 </button>
-                               </div>
-                               <div class="modal-body">
-                                 
-                                 <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 20px" v-for="like in post.likes">               
-                                  <div class="d-flex justify-content-between align-items-center">
-                                  <div class="mr-2" >
-                                    <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">
-                                  </div>
-                                  <div class="ml-2">
-                                      <div class="h5 m-0"> @{{like.name}}</div>
-                                      <div class="h7 text-muted">Miracles Lee Cross
+                                   <div class="d-flex justify-content-between align-items-center" style="margin-bottom: 20px" v-for="like in post.likes">               
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <div class="mr-2" >
+                                        <img class="rounded-circle" width="45" src="https://picsum.photos/50/50" alt="">
                                       </div>
+                                      <div class="ml-2">
+                                        <
+                                        <div class="h5 m-0" v-if="like.id=={{Auth::user()->id}}"> You
+                                        </div>
+                                        <div class="h5 m-0" v-else> @{{like.name}}</div>
+                                        <div class="h7 text-muted">Miracles Lee Cross
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <button class="btn btn-primary pull-right" v-if="like.id !== {{Auth::user()->id}}"><i class="fa fa-user-plus" aria-hidden="true" ></i>
+                                    add friend</button>
                                   </div>
-                              </div>
-                              <button class="btn btn-primary pull-right"><i class="fa fa-user-plus" aria-hidden="true"></i>
-                              add friend</button>
-                            </div>
-                                 
-                               </div>
-                               <div class="modal-footer">
+
+                                </div>
+                                <div class="modal-footer">
                                  <button type="button" class="btn btn-secondary"                          data-dismiss="modal">Close</button>
                                </div>
                              </div>
@@ -223,19 +436,28 @@
                          </div>
                         
                         
-                        <hr style="color: #d9d9f3" v-if="post.comments.length >0 && post.likes.length == 0">
-                        
-                        
-                        <a href="" v-if="post.comments.length > 0" class="pull-right" @click.prevent=" commentHidden =! commentHidden" :class="testComment" style="margin-bottom: -20px">
-                         <span > @{{post.comments.length}} comment </span></a>
-                        
-                      </section>
+                        <!--post likes count-->
+                        <section style="margin-bottom: -20px">
+                          
+                          <hr style="color: #d9d9f3" v-if="post.likes.length >0">
+                          <a href=""   data-toggle="modal" data-target="#exampleModal"  data-id="post.id" v-if="post.likes.length >0">
+                           <span > @{{post.likes.length}} <i class="fa fa-heart-o" aria-hidden="true" class="fa fa-heart"  ></i> </span></a>
+                           <!-- Button trigger modal -->
+                           
+
+                         <hr style="color: #d9d9f3" v-if="post.comments.length >0 && post.likes.length == 0">
+
+
+                         <a href="" v-if="post.comments.length > 0" class="pull-right" @click.prevent=" commentHidden =! commentHidden" :class="testComment" style="margin-bottom: -20px">
+                           <span > @{{post.comments.length}} comment </span></a>
+
+                         </section>
                         
                      </div>
-                     <span v-if="post.liked">this post is liked</span>
+                     
                     <div class="card-footer">
                         
-                        <a href="#" class="card-link" v-if="isFavorited" @click.prevent="unFavorite(post.id,key)" style="margin-right:15px" >
+                        <a href="#" class="card-link" v-if="isFavorited" @click.prevent="unFavorite(post.id)" style="margin-right:15px" >
                           <i  class="fa fa-heart" style="color:red;"></i>Like
                         </a>
                         <a href="#" class="card-link" v-else @click.prevent="favorite(post.id,key)" style="margin-right:15px" >
@@ -304,7 +526,6 @@
             el: '#app',
             data: {
               commentHidden: false,
-              liked: false,
               likes: '',
               comments: [],
               commentBox: {},
@@ -313,23 +534,35 @@
               content:'',
               validationErrors:[],
               isFavorited: '',
-              favorited:false,
+              updatedContent:'',
+              title:'',
+              published:'',
+             // favorited:false,
               
-
             },
             mounted(){
-             axios.get('/test/posts')
+            
+             axios.get('/home/posts')
              .then(response => {
               console.log(response); 
               this.posts = response.data; 
               console.log('congrat');
-
             })
              .catch(function (error) {
               console.log(error); // run if we have error
            });
+            this.listen();
+            /*
+            axios.get('/posts/likes')
+             .then((response) => {
+                console.log('ok')
+             })
+             .catch(function (error) {
+              console.log(error); // run if we have error
+           });*/
 
-            this.isFavorited = this.isFavorite ? true : false;
+            
+            //this.isFavorited = this.isFavorite ? true : false;
        
            },
             computed:{
@@ -337,17 +570,16 @@
 
                   return this.commentHidden;
               },
-              likedPost:function(){
-
-                  return this.posts.liked ? true: false ;
-              },
-              testLike:function(){
-                return (this.liked) ? 'liked':'';
-              },
+              isLiked(){
+                this.posts.forEach(function(post){
+                 return post.liked  ? true : false;
+                 })
+              }
+              /*
               isFavorite() {
                 //return this.posts.liked ? true: false ;
                 return this.favorited;
-              },
+              },*/
 
             },
             methods:{
@@ -366,7 +598,9 @@
                   this.content = '';
                   if(response.status===200){
                     app.posts = response.data;
-               }
+                }
+                swal('Added!', 'The post has been added.', 'success');
+                console.log('ok');
                 })
                 .catch((error) => {
                   
@@ -376,10 +610,13 @@
                   console.log(error);
                 })
               },
-              favorite(id,key) {
-                axios.post('/like/'+id)
+              favorite(id) {
+                axios.post('/like/'+id ,{
+                    api_token: this.user.api_token
+                })
                     .then((response) => {
-                      this.isFavorited = true;
+                      //this.isFavorited = true;
+                      console.log(response.data.post);
                       this.posts = response.data
                     })
                     .catch(response => console.log(response.data));
@@ -410,6 +647,67 @@
                 })
 
               },
+              openModal(id){
+                //$("#exampleModalLong").modal('show');
+                axios.get('/post/modal/' + id)
+                             .then(response => {
+                              console.log(response.data); 
+                              this.title = response.data[0];
+                              this.updatedContent = response.data[1];
+
+                              console.log('congrat');
+                              })
+                             .catch((error) => {
+                              console.log(error);
+                             });
+               
+              },
+              updatePost(id){
+                axios.post('/updatePost/' + id, {
+                  api_token : this.user.api_token,
+                  content : this.updatedContent,
+                  title : this.title,
+                  published : this.published,
+                })
+                .then((response) => {
+
+                  if(response.status===200){
+                      app.posts = response.data;
+                  }
+                  $(".editModal").modal('hide');
+                  swal('Updated!', 'The post has been updated.', 'success');
+                })
+                .catch((error) => {
+                    if (error.response.status == 422){
+                         this.validationErrors = error.response.data.errors;
+                    }
+                    console.log(error);
+                })
+              },
+              deletePost(id){
+                axios.delete('/posts/' + id + '/delete',{
+                    api_token : this.user.api_token,
+                })
+                .then((response) => {
+                    if(response.status===200){
+                      app.posts = response.data;
+                    }
+                    $(".deleteModal").modal('hide');
+                    swal('Deleted!', 'The post has been deleted.', 'success');
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+              },
+              
+             listen() {
+                Echo.channel('new-post')
+                .listen('NewPost', (event) => {
+                    console.log(event);
+                    console.log('new post');
+                
+              })
+             }
             }
           });
 

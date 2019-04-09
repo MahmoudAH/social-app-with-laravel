@@ -39,8 +39,14 @@ Vue.component('chat-form',
 Vue.component('test',
 require('./components/test.vue').default);
 
+Vue.component('showComments',
+require('./components/showComments.vue').default);
+
+
 Vue.component('commentsCount',
 require('./components/commentsCount.vue').default);
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

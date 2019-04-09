@@ -133,6 +133,7 @@ class PostController extends Controller
 
     $user->notify(new NewPost($post));
     }
+
     public function load_display()
     {
 
@@ -141,4 +142,6 @@ class PostController extends Controller
         return response()->json($load );
 
     }
+    
+
 }

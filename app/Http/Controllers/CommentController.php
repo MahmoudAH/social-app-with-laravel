@@ -7,6 +7,7 @@ use App\Post;
 use App\Comment;
 use Auth;
 use App\Events\NewComment;
+use App\Events\NewLike;
 
 class CommentController extends Controller
 {
@@ -22,10 +23,15 @@ class CommentController extends Controller
       'user_id' => Auth::id()
     ]);
 
-    $comment = Comment::where('id', $comment->id)->with('user')->first();
-    broadcast(new NewComment($comment))->toOthers();
+   
+    /*$post = post::with('user','likes','comments.user')
+        ->orderBy('created_at','DESC')->get();*/
+
+    broadcast(new NewLike($post))->toOthers();
+
     return post::with('user','likes','comments.user')
         ->orderBy('created_at','DESC')->get();
     //return $comment->toJson();
   }
+  
 }

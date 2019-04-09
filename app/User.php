@@ -42,11 +42,15 @@ class User extends Authenticatable
 
    /* public function likes(){
         return $this->hasMany('App\Like');
-    }*/
+    }
 
     public function likes()
     {
         return $this->belongsToMany(Post::class, 'likes', 'user_id', 'post_id')->withTimeStamps();
+    }*/
+    public function likes()
+    {
+        return $this->belongsToMany(Post::class, 'likes')->withTimeStamps();;
     }
 
     public function messages()

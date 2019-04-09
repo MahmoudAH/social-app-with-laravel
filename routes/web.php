@@ -14,11 +14,21 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/test/posts', function () {
-      return App\post::with('user','likes','comments.user')
-			->orderBy('created_at','DESC')
-			->get();
+
+Route::get('/home/posts', function () {
+  return response(App\post::with('user','likes','comments.user')
+  ->orderBy('created_at','DESC')
+  ->get() )->header('Content_Type','sucses');  
+  
 });
+
+Route::get('/post/modal/{id}', function ($id) {
+  $postData = App\Post::where('id',$id)->get();
+  return [$postData[0]->title,$postData[0]->content];
+});
+
+Route::post('/updatePost/{id}', 'HomeController@updatePost');
+
 
 /*$posts = Post::with(['like' => function ($like) use ($user_id) {
     return $like->whereHas('user', function ($user) use ($user_id) {
@@ -44,7 +54,9 @@ Route::post('/post/create', 'VueController@store');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/home', 'HomeController@store')->name('store');
 Route::put('/home/{post}', 'HomeController@update')->name('update');
-Route::delete('/home/{post}', 'HomeController@destroy')->name('delete');
+
+Route::delete('/posts/{post}/delete', 'HomeController@destroy');
+
 Route::get('/friends', 'FriendController@index')->name('friends.index');
 Route::post ( '/add-friend/{user}', 'FriendController@addFriend' )->name('friend.add');
 Route::post ( '/accept-friend/{user}', 'FriendController@acceptFriend' )->name('friend.accept');

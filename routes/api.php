@@ -21,6 +21,7 @@ Route::get('/posts/{post}/likes', 'LikeController@index');
 Route::middleware('auth:api')->group(function () {
     //store post comments
     Route::post('/posts/{post}/comment', 'CommentController@store');
+    Route::post('/comment/{post}/test', 'RealTimeController@store');
 
     //store post likes
 

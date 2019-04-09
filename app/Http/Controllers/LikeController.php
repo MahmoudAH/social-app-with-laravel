@@ -21,11 +21,21 @@ class LikeController extends Controller
     */
     public function likePost(Post $post)
     {
+        $isLiked = Like::where('user_id', Auth::id())
+        ->where('post_id', $post->id)
+        ->first();
+
+        if($isLiked) {
+            Auth::user()->likes()->detach($post->id);
+            return response (post::with('user','likes','comments.user')->orderBy('created_at','DESC')->get() )->header('Content_Type','deleted');
+
+
+        }else{
+            Auth::user()->likes()->attach($post->id);
+            return response (post::with('user','likes','comments.user')->orderBy('created_at','DESC')->get() )->header('Content_Type','added');
+
+        }
         
-        Auth::user()->likes()->attach($post->id);
-        
-        return post::with('user','likes','comments.user')->orderBy('created_at','DESC')->get();
-      
     }
 
     /**
@@ -37,7 +47,6 @@ class LikeController extends Controller
     public function unlikePost(Post $post)
     {
         Auth::user()->likes()->detach($post->id);
-
         return post::with('user','likes','comments.user')->orderBy('created_at','DESC')->get();
       
     } 

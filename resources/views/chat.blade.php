@@ -125,7 +125,7 @@
         </div>
    
         <div class="mesgs">
-          <div class="msg_history">
+          <div class="msg_history" id="scroll">
             <chat-messages :messages="messages" :user="{{ Auth::user() }}">
                 
             </chat-messages>
@@ -141,7 +141,14 @@
 
 @endsection
 @section('scripts')
-
+<script type="text/javascript">
+  
+  $(function () {
+var d = $('#scroll');
+d.scrollTop(d.prop("scrollHeight"));
+       
+});
+</script>
 <script>
 	const app = new Vue({
     el: '#app',
@@ -266,5 +273,6 @@
         }
     } 
 });
+
 </script>
 @endsection

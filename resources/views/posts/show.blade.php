@@ -76,7 +76,7 @@
                 });
         },
         postComment() {
-          axios.post('/api/posts/'+this.post.id+'/comment', {
+          axios.post('/api/comment/'+this.post.id+'/test', {
             api_token: this.user.api_token,
             body: this.commentBox
           })
@@ -91,6 +91,7 @@
         listen() {
           Echo.channel('post.'+this.post.id)
               .listen('NewComment', (comment) => {
+                console.log('new comment');
                 this.comments.unshift(comment);
               })
         }

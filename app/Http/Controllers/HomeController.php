@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewPost;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Comment;
 use App\User;
 use Auth;
+use Alert;
 use DB;
 class HomeController extends Controller
 {
@@ -64,6 +66,29 @@ class HomeController extends Controller
       return redirect()->route('home');
     }*/
 
+    public function store(Request $request)
+    {
+      $this->validate($request, [
+        'title' => 'max:255',
+        'content' => 'required',
+      ]);
+
+      $user = Auth::user();
+
+      $post = $user->posts()->create([
+        'content' => $request->content,
+        'published' => $request->has('published')
+      ]);
+      
+
+      alert()->success('You have created post.', 'Great Job!');
+      return post::with('user','likes','comments')
+        ->orderBy('created_at','DESC')->get();
+
+      
+     // return response()->json($post);
+    }
+
     public function friends()
     {
         return view('friends');
@@ -84,30 +109,34 @@ class HomeController extends Controller
       return back()->with('message','success');
     }
 
-    public function destroy(Request $request)
-    {
-       $post = Post::findOrFail($request->post_id);
-       $post->delete();
-       
-       return back()->with('message','wow...deleted successfully');
-       
-    }
-    public function store(Request $request)
+    public function updatePost(Request $request, $id)
     {
       $this->validate($request, [
         'title' => 'max:255',
-        'content' => 'required',
+        'content' => 'required|min:10',
       ]);
 
-      $user = Auth::user();
+      $post = Post::findOrFail($id);
+      if($request->title){
+        $post->title = $request->title;  
+      }
+      $post->content = $request->content;
+      $post->published = ($request->has('published') ? true : false);
+      $post->save();
 
-      $post = $user->posts()->create([
-        'content' => $request->content,
-        'published' => $request->has('published')
-      ]);
       return post::with('user','likes','comments')
         ->orderBy('created_at','DESC')->get();
-     // return response()->json($post);
+        alert()->success('You have update post.', 'Great Job!');
+    }
+
+     public function destroy($id)
+    {
+       $post = Post::findOrFail($id);
+       $post->delete();
+       
+       return post::with('user','likes','comments')
+        ->orderBy('created_at','DESC')->get();
+       
     }
 
 }
